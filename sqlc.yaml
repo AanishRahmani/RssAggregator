@@ -1,0 +1,23 @@
+version: "2"
+# cloud:
+#   project: "<PROJECT_ID>"
+sql:
+- schema: "sql/schema"
+  queries: "sql/queries"
+  engine: "postgresql"
+  gen:
+    go: 
+      package: "authors"
+      out: "rssagg"
+  # database:
+  #   managed: true
+    # uri: postgres://admin:password:@localhost:5432/rssagg?sslmode=disable
+#   rules:
+#     - sqlc/db-prepare
+# - schema: "mysql/schema.sql"
+#   queries: "mysql/query.sql"
+#   engine: "mysql"
+#   gen:
+#     go:
+#       package: "authors"
+#       out: "mysql"
