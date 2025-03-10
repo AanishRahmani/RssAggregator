@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/AanishRahmani/rssAggregator/internal/database"
+	"github.com/AanishRahmani/rssAggregator/internal/databases"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
@@ -15,7 +15,7 @@ import (
 )
 
 type apiConfig struct {
-	DB *database.Queries
+	DB *databases.Queries
 }
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
 	}
 
 	apiCfg := apiConfig{
-		DB: database.New(conn),
+		DB: databases.New(conn),
 	}
 
 	router := chi.NewRouter()
@@ -59,6 +59,12 @@ func main() {
 	v1Router.Get("/healthz", handlerRediness)
 	v1Router.Get("/err", handlerErr)
 	v1Router.Post("/users", apiCfg.handlerCreateUser)
+	v1Router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerGetUserByAPIKey))
+	v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerCreateFeed))
+	v1Router.Get("/feeds", apiCfg.handlerGetFeeds)
+	v1Router.Post("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerCreateFeedFollow))
+	v1Router.Get("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerGetFeedFollows))
+	v1Router.Delete("/feed_follows/{feedFollowID}", apiCfg.middlewareAuth(apiCfg.handlerDeleteFeedFollows))
 	router.Mount("/v1", v1Router)
 
 	server := &http.Server{
