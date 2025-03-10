@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/AanishRahmani/rssAggregator/internal/databases"
 	"github.com/go-chi/chi"
@@ -19,6 +20,12 @@ type apiConfig struct {
 }
 
 func main() {
+
+	// feed, err := urlToFeed("https://wagslane.dev/index.xml")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println(feed)
 
 	godotenv.Load(".env")
 
@@ -36,11 +43,12 @@ func main() {
 	if err != nil {
 		log.Fatal("cant connect to DataBase")
 	}
-
+	db := databases.New(conn)
 	apiCfg := apiConfig{
-		DB: databases.New(conn),
+		DB: db,
 	}
 
+	go startScraping(db, 10, time.Minute)
 	router := chi.NewRouter()
 
 	router.Use(cors.Handler(cors.Options{
