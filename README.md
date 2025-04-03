@@ -1,7 +1,7 @@
 # RSS Feed Aggregator
 
 ## Overview
-This is an **RSS Feed Aggregator** implemented in Go, which allows users to register RSS feeds and actively fetches new articles from registered sources. The aggregator stores feeds and their content in a **PostgreSQL database**, making it easy to track updates from multiple sources.
+This is an **RSS Feed Aggregator** implemented in Go, which allows users to register RSS feeds and actively fetch new articles from registered sources. The aggregator stores feeds and their content in a **PostgreSQL database**, making it easy to track updates from multiple sources.
 
 ## Features
 - **User Registration**: Users can create accounts and receive an API key for authentication.
@@ -13,31 +13,38 @@ This is an **RSS Feed Aggregator** implemented in Go, which allows users to regi
 ## Installation and Setup
 To run the RSS Feed Aggregator, ensure you have **Docker** installed on your system.
 
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/RssAggregator.git
-   cd RssAggregator
-   ```
+### 1. Clone the Repository
+```sh
+git clone https://github.com/yourusername/RssAggregator.git
+cd RssAggregator
+```
 
-2. Navigate to the `dockerComposeForPGSQLandPDADMIN` directory:
-   ```sh
-   cd dockerComposeForPGSQLandPDADMIN
-   ```
+### 2. Configure Environment Variables
+Create a `.env` file in the root directory and specify the following:
+```
+PORT=8000
+DB_URL=postgres://admin:password@localhost:5432/rssagg?sslmode=disable
+```
 
-3. Set up PostgreSQL and pgAdmin using Docker Compose:
-   ```sh
-   docker-compose up -d
-   ```
+### 3. Start PostgreSQL with Docker Compose
+Navigate to the `dockerComposeForPGSQLandPDADMIN` directory and run:
+```sh
+cd dockerComposeForPGSQLandPDADMIN
+docker-compose up -d
+```
 
-4. Then, return to the project root directory:
-   ```sh
-   cd ..
-   ```
+### 4. Apply Database Migrations
+We use **Goose** for database migrations. Run the following command to apply migrations:
+```sh
+goose -dir migrations postgres "$DB_URL" up
+```
 
-5. Build and run the aggregator:
-   ```sh
-   go run main.go
-   ```
+### 6. Run the Aggregator
+Return to the project root directory and start the application:
+```sh
+cd ..
+go run main.go
+```
 
 ## Steps to Use
 
@@ -51,10 +58,10 @@ Send the following JSON request to `http://127.0.0.1:8000/v1/users`:
 - This will generate an **API key** that must be used for authentication in subsequent requests.
 
 ### 2. Register an RSS Feed
-Send the following JSON request to `http://127.0.0.1:8000/v1/feeds`, **__including your API key in the request headers:__**
+Send the following JSON request to `http://127.0.0.1:8000/v1/feeds`, **including your API key in the request headers:**
 ```json
 {
-  "name": "example Blog",
+  "name": "Example Blog",
   "url": "https://example.com/index.xml"
 }
 ```
