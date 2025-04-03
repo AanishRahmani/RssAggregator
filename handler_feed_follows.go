@@ -6,12 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	// "github.com/AanishRahmani/rssAggregator/internal/auth"
-
 	"github.com/AanishRahmani/rssAggregator/internal/databases"
 	"github.com/go-chi/chi"
 
-	// "github.com/AanishRahmani/rssAggregator/internal/databases"
 	"github.com/google/uuid"
 )
 
