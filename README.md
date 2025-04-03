@@ -10,7 +10,7 @@ This is an **RSS Feed Aggregator** implemented in Go, which allows users to regi
 - **PostgreSQL Storage**: Feeds and articles are stored in a structured database for retrieval and analysis.
 - **Secure API Access**: API key authentication ensures secure interactions with the aggregator.
 
-## Installation
+## Installation and Setup
 To run the RSS Feed Aggregator, ensure you have **Docker** installed on your system.
 
 1. Clone the repository:
